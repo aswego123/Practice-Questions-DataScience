@@ -1,0 +1,70 @@
+import pandas as pd
+import numpy as np
+from io import StringIO
+
+data = """Week_Number,Demo_Requests,Qualified_Leads
+1,684,125
+2,482,87
+3,609,111
+4,528,97
+5,587,116
+6,763,142
+7,611,120
+8,523,99
+9,556,109
+10,621,119
+11,548,103
+12,731,150
+13,629,126
+14,748,152
+15,766,161
+16,798,171
+17,845,174
+18,650,132
+19,689,130
+20,763,149
+21,730,149
+22,839,183
+23,722,150
+24,783,163
+25,738,156
+26,699,151
+27,895,191
+28,831,182
+29,701,149
+30,740,162
+31,919,204
+32,782,177
+33,1044,229
+34,987,229
+35,1058,249
+36,738,165
+37,851,199
+38,913,219
+39,910,214
+40,1137,261
+41,917,222
+42,906,214
+43,1030,244
+44,1120,267
+45,989,239
+46,1079,267
+47,1021,244
+48,1097,277
+49,976,253
+50,1304,333
+51,995,251
+52,1163,303"""
+
+df = pd.read_csv(StringIO(data))
+df["conversion"] = df["Qualified_Leads"] / df["Demo_Requests"]
+
+# linear regression for FORECAST.LINEAR
+x = df["Week_Number"]
+y = df["conversion"]
+
+slope = np.cov(x, y, bias=True)[0,1] / np.var(x)
+intercept = y.mean() - slope * x.mean()
+
+forecast_53 = intercept + slope * 53
+print(forecast_53)
